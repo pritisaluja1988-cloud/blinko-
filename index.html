@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blinko - Online Shopping</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6ff;color:#222}
+header{background:#1769e8;color:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{font-size:30px;font-weight:bold}
+.search{padding:12px;border:0;border-radius:8px;width:min(100%,350px);font-size:16px}
+.cart{background:#ffcc32;color:#222;padding:12px 18px;border-radius:8px;font-weight:bold}
+.hero{background:linear-gradient(120deg,#1769e8,#8d45ef);color:white;text-align:center;padding:45px 15px}
+.hero h1{font-size:36px;margin:5px}
+.hero p{font-size:18px}
+.categories{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:25px}
+.category{background:white;padding:22px;border-radius:15px;text-align:center;width:180px;box-shadow:0 3px 12px #ddd;cursor:pointer}
+.category .emoji{font-size:45px}
+.products{padding:20px 5%}
+.products h2{text-align:center;color:#1769e8}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.card{background:white;border-radius:14px;padding:20px;text-align:center;box-shadow:0 3px 12px #ddd}
+.product-icon{font-size:55px}
+.price{font-size:21px;color:#168b45;font-weight:bold}
+button{border:0;border-radius:8px;padding:12px 18px;background:#ffb900;color:#222;font-weight:bold;cursor:pointer}
+button:hover{background:#ff9800}
+.notice{text-align:center;background:white;padding:25px;margin:20px;border-radius:12px}
+footer{background:#17243b;color:white;text-align:center;padding:25px;margin-top:35px}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">🛍️ Blinko</div>
+ <input class="search" id="search" placeholder="Search groceries and food..." oninput="searchItems()">
+ <div class="cart">🛒 Cart: <span id="count">0</span></div>
+</header>
+
+<section class="hero">
+ <h1>Welcome to Blinko!</h1>
+ <p>आपकी Shopping, अब होगी आसान!</p>
+ <p>Grocery और Restaurant Food एक ही जगह</p>
+</section>
+
+<section class="categories">
+ <div class="category" onclick="showCategory('grocery')">
+  <div class="emoji">🛒</div>
+  <h3>Grocery Items</h3>
+  <p>Daily Needs</p>
+ </div>
+ <div class="category" onclick="showCategory('food')">
+  <div class="emoji">🍕</div>
+  <h3>Restaurant Food</h3>
+  <p>Delicious Food</p>
+ </div>
+</section>
+
+<section class="products">
+ <h2 id="heading">Popular Products</h2>
+ <div class="grid" id="productGrid">
+
+  <div class="card" data-category="grocery" data-name="Nandi Atta 5 kg">
+   <div class="product-icon">🌾</div>
+   <h3>Nandi Atta 5 KG</h3>
+   <p class="price">₹215</p>
+   <button onclick="addCart()">Add to Cart</button>
+  </div>
+
+  <div class="card" data-category="grocery" data-name="Nandi Atta 10 kg">
+   <div class="product-icon">🌾</div>
+   <h3>Nandi Atta 10 KG</h3>
+   <p class="price">₹420</p>
+   <button onclick="addCart()">Add to Cart</button>
+  </div>
+
+  <div class="card" data-category="food" data-name="Restaurant Food">
+   <div class="product-icon">🍽️</div>
+   <h3>Restaurant Food</h3>
+   <p>Food items coming soon</p>
+  </div>
+
+ </div>
+</section>
+
+<div class="notice">
+ <h2>🎉 Welcome to Blinko</h2>
+ <p>आपकी अपनी Online Shopping Website</p>
+</div>
+
+<footer>
+ <h2>🛍️ Blinko</h2>
+ <p>Grocery Items | Restaurant Food Items</p>
+ <p>Thank you for visiting Blinko!</p>
+</footer>
+
+<script>
+let cartCount=0;
+
+function addCart(){
+ cartCount++;
+ document.getElementById("count").innerText=cartCount;
+ alert("Product added to cart!");
+}
+
+function showCategory(category){
+ document.querySelectorAll(".card").forEach(card=>{
+  card.style.display=
+   card.dataset.category===category?"block":"none";
+ });
+ document.getElementById("heading").innerText=
+ category==="grocery"?"Grocery Items":"Restaurant Food Items";
+}
+
+function searchItems(){
+ let query=document.getElementById("search").value.toLowerCase();
+ document.querySelectorAll(".card").forEach(card=>{
+  card.style.display=
+   card.dataset.name.toLowerCase().includes(query)?"block":"none";
+ });
+}
+</script>
+
+</body>
+</html>
