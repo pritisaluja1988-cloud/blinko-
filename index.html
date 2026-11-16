@@ -1,126 +1,93 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blinko - Online Shopping</title>
+<title>Blinko | Grocery & Restaurant Food</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f6ff;color:#222}
-header{background:#1769e8;color:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.logo{font-size:30px;font-weight:bold}
-.search{padding:12px;border:0;border-radius:8px;width:min(100%,350px);font-size:16px}
-.cart{background:#ffcc32;color:#222;padding:12px 18px;border-radius:8px;font-weight:bold}
-.hero{background:linear-gradient(120deg,#1769e8,#8d45ef);color:white;text-align:center;padding:45px 15px}
-.hero h1{font-size:36px;margin:5px}
-.hero p{font-size:18px}
-.categories{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:25px}
-.category{background:white;padding:22px;border-radius:15px;text-align:center;width:180px;box-shadow:0 3px 12px #ddd;cursor:pointer}
-.category .emoji{font-size:45px}
-.products{padding:20px 5%}
-.products h2{text-align:center;color:#1769e8}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
-.card{background:white;border-radius:14px;padding:20px;text-align:center;box-shadow:0 3px 12px #ddd}
-.product-icon{font-size:55px}
-.price{font-size:21px;color:#168b45;font-weight:bold}
-button{border:0;border-radius:8px;padding:12px 18px;background:#ffb900;color:#222;font-weight:bold;cursor:pointer}
-button:hover{background:#ff9800}
-.notice{text-align:center;background:white;padding:25px;margin:20px;border-radius:12px}
-footer{background:#17243b;color:white;text-align:center;padding:25px;margin-top:35px}
+:root{--blue:#1769e8;--purple:#8045e8;--yellow:#ffca28;--ink:#17243b;--muted:#667085;--bg:#f4f6ff;--green:#168b45}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#222}
+header{background:var(--blue);color:#fff;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+.logo{font-size:28px;font-weight:800}.search{padding:12px;border:0;border-radius:9px;width:min(100%,360px);font-size:16px}
+nav{display:flex;gap:8px;flex-wrap:wrap}nav button{background:#fff;color:var(--blue)}
+button{border:0;border-radius:9px;padding:11px 15px;background:var(--yellow);color:#222;font-weight:700;cursor:pointer}
+button.secondary{background:#e8efff;color:var(--blue)}button.dark{background:var(--ink);color:#fff}button:disabled{opacity:.45;cursor:not-allowed}
+.hero{background:linear-gradient(120deg,var(--blue),var(--purple));color:#fff;text-align:center;padding:42px 15px}.hero h1{font-size:clamp(28px,5vw,42px);margin:4px}.hero p{font-size:18px}
+.wrap{max-width:1100px;margin:auto;padding:22px 16px}.categories{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:8px 0 24px}
+.category{background:#fff;padding:18px;border-radius:14px;text-align:center;width:190px;box-shadow:0 3px 12px #ddd;cursor:pointer;border:2px solid transparent}.category.active{border-color:var(--blue)}.emoji{font-size:40px}
+h2{color:var(--blue)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:16px}
+.card,.panel{background:#fff;border-radius:14px;padding:18px;box-shadow:0 3px 12px #e1e4ee}.card{text-align:center}.product-icon{font-size:48px}.price{font-size:21px;color:var(--green);font-weight:800}
+.muted{color:var(--muted);font-size:14px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+input,textarea,select{width:100%;padding:12px;border:1px solid #ccd3e0;border-radius:8px;font:inherit;margin:5px 0 12px;background:white}
+label{font-weight:700;font-size:14px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hidden{display:none!important}.cartline{border-bottom:1px solid #eee;padding:10px 0}.qty{display:flex;gap:8px;align-items:center}
+.total{font-size:22px;font-weight:800}.notice{background:#fff;padding:20px;border-radius:12px;text-align:center;margin:20px 0}
+.status{padding:5px 9px;border-radius:20px;background:#eef2ff;color:#3446a0;font-size:12px;font-weight:700}
+footer{background:var(--ink);color:#fff;text-align:center;padding:24px;margin-top:30px}
+@media(max-width:620px){header{position:static}.formgrid{grid-template-columns:1fr}.logo{width:100%}.search{width:100%}}
 </style>
 </head>
 <body>
-
 <header>
  <div class="logo">🛍️ Blinko</div>
- <input class="search" id="search" placeholder="Search groceries and food..." oninput="searchItems()">
- <div class="cart">🛒 Cart: <span id="count">0</span></div>
+ <input class="search" id="search" placeholder="Search grocery and food..." oninput="renderProducts()">
+ <nav><button onclick="showView('shop')">Shop</button><button onclick="showView('cart')">🛒 Cart (<span id="cartCount">0</span>)</button><button class="secondary" onclick="showView('delivery')">Delivery Desk</button></nav>
 </header>
-
-<section class="hero">
- <h1>Welcome to Blinko!</h1>
- <p>आपकी Shopping, अब होगी आसान!</p>
- <p>Grocery और Restaurant Food एक ही जगह</p>
-</section>
-
-<section class="categories">
- <div class="category" onclick="showCategory('grocery')">
-  <div class="emoji">🛒</div>
-  <h3>Grocery Items</h3>
-  <p>Daily Needs</p>
+<section class="hero"><h1>Welcome to Blinko!</h1><p>आपकी Shopping, अब होगी आसान!</p><p>Grocery और Restaurant Food एक ही जगह</p></section>
+<main class="wrap">
+<section id="shopView">
+ <div class="categories">
+  <div class="category active" id="cat-all" onclick="setCategory('all')"><div class="emoji">🛍️</div><h3>All Items</h3></div>
+  <div class="category" id="cat-grocery" onclick="setCategory('grocery')"><div class="emoji">🛒</div><h3>Grocery Items</h3></div>
+  <div class="category" id="cat-food" onclick="setCategory('food')"><div class="emoji">🍕</div><h3>Restaurant Food</h3></div>
  </div>
- <div class="category" onclick="showCategory('food')">
-  <div class="emoji">🍕</div>
-  <h3>Restaurant Food</h3>
-  <p>Delicious Food</p>
- </div>
+ <h2 id="productHeading">Popular Products</h2>
+ <div class="grid" id="productGrid"></div>
+ <p class="muted">Restaurant food items और उनकी कीमतें दुकान द्वारा जोड़ने पर यहाँ दिखाई देंगी।</p>
 </section>
-
-<section class="products">
- <h2 id="heading">Popular Products</h2>
- <div class="grid" id="productGrid">
-
-  <div class="card" data-category="grocery" data-name="Nandi Atta 5 kg">
-   <div class="product-icon">🌾</div>
-   <h3>Nandi Atta 5 KG</h3>
-   <p class="price">₹215</p>
-   <button onclick="addCart()">Add to Cart</button>
-  </div>
-
-  <div class="card" data-category="grocery" data-name="Nandi Atta 10 kg">
-   <div class="product-icon">🌾</div>
-   <h3>Nandi Atta 10 KG</h3>
-   <p class="price">₹420</p>
-   <button onclick="addCart()">Add to Cart</button>
-  </div>
-
-  <div class="card" data-category="food" data-name="Restaurant Food">
-   <div class="product-icon">🍽️</div>
-   <h3>Restaurant Food</h3>
-   <p>Food items coming soon</p>
-  </div>
-
- </div>
+<section id="cartView" class="hidden">
+ <div class="panel"><h2>Your Cart</h2><div id="cartLines"></div><div class="row"><span class="total" id="cartTotal">Total: ₹0</span><button onclick="showView('checkout')" id="checkoutBtn">Proceed to Order</button></div></div>
 </section>
-
-<div class="notice">
- <h2>🎉 Welcome to Blinko</h2>
- <p>आपकी अपनी Online Shopping Website</p>
-</div>
-
-<footer>
- <h2>🛍️ Blinko</h2>
- <p>Grocery Items | Restaurant Food Items</p>
- <p>Thank you for visiting Blinko!</p>
-</footer>
-
+<section id="checkoutView" class="hidden">
+ <div class="panel"><h2>Customer Details</h2><p class="muted">अपना सही मोबाइल नंबर और पूरा डिलीवरी पता भरें।</p>
+ <form id="orderForm" onsubmit="placeOrder(event)">
+  <div class="formgrid"><div><label>Customer name *</label><input id="customerName" required maxlength="70" placeholder="पूरा नाम"></div><div><label>Mobile number *</label><input id="customerPhone" required inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10 अंकों का मोबाइल नंबर"></div></div>
+  <label>Delivery address *</label><textarea id="customerAddress" required maxlength="350" rows="3" placeholder="मकान नंबर, मोहल्ला, शहर और नजदीकी पहचान"></textarea>
+  <label>Order note (optional)</label><input id="orderNote" maxlength="150" placeholder="कोई विशेष निर्देश">
+  <div class="row"><span class="total" id="checkoutTotal">Total: ₹0</span><button type="submit">Save Order & Continue to WhatsApp</button></div>
+ </form>
+ <p class="muted">ऑर्डर इस ब्राउज़र में सेव होगा और WhatsApp पर संदेश तैयार होगा। ऑनलाइन सर्वर/पेमेंट अभी कनेक्ट नहीं हैं।</p></div>
+</section>
+<section id="deliveryView" class="hidden">
+ <div class="panel"><div class="row"><div><h2>Delivery Desk</h2><p class="muted">इस डिवाइस/ब्राउज़र में सेव किए गए ऑर्डर</p></div><button class="secondary" onclick="renderOrders()">Refresh</button></div>
+ <div class="grid" id="metrics"></div><div id="ordersList"></div>
+ <p class="muted">यह शुरुआती डेमो है। अलग-अलग मोबाइल पर ऑर्डर साझा करने के लिए सुरक्षित ऑनलाइन डेटाबेस और स्टाफ लॉगिन जोड़ना जरूरी है।</p></div>
+</section>
+<section id="successView" class="hidden"><div class="panel"><h2>Order saved</h2><p id="successText"></p><button onclick="showView('shop')">Continue Shopping</button></div></section>
+</main>
+<footer><h2 style="color:white">🛍️ Blinko</h2><p>Grocery Items | Restaurant Food Items</p><p>Thank you for choosing Blinko!</p></footer>
 <script>
-let cartCount=0;
-
-function addCart(){
- cartCount++;
- document.getElementById("count").innerText=cartCount;
- alert("Product added to cart!");
-}
-
-function showCategory(category){
- document.querySelectorAll(".card").forEach(card=>{
-  card.style.display=
-   card.dataset.category===category?"block":"none";
- });
- document.getElementById("heading").innerText=
- category==="grocery"?"Grocery Items":"Restaurant Food Items";
-}
-
-function searchItems(){
- let query=document.getElementById("search").value.toLowerCase();
- document.querySelectorAll(".card").forEach(card=>{
-  card.style.display=
-   card.dataset.name.toLowerCase().includes(query)?"block":"none";
- });
-}
+const WHATSAPP_NUMBER='9336705149';
+const products=[
+ {id:'atta5',name:'Nandi Atta 5 KG',price:215,category:'grocery',icon:'🌾'},
+ {id:'atta10',name:'Nandi Atta 10 KG',price:420,category:'grocery',icon:'🌾'}
+];
+let cart=JSON.parse(localStorage.getItem('blinko_cart')||'{}');
+let category='all';
+const readOrders=()=>JSON.parse(localStorage.getItem('blinko_orders')||'[]');
+const saveCart=()=>{localStorage.setItem('blinko_cart',JSON.stringify(cart));updateCartCount()};
+function updateCartCount(){document.getElementById('cartCount').textContent=Object.values(cart).reduce((a,b)=>a+b,0)}
+function setCategory(c){category=c;document.querySelectorAll('.category').forEach(x=>x.classList.remove('active'));document.getElementById('cat-'+c).classList.add('active');renderProducts()}
+function renderProducts(){const q=document.getElementById('search').value.toLowerCase();const list=products.filter(p=>(category==='all'||p.category===category)&&p.name.toLowerCase().includes(q));document.getElementById('productHeading').textContent=category==='grocery'?'Grocery Items':category==='food'?'Restaurant Food Items':'Popular Products';document.getElementById('productGrid').innerHTML=list.length?list.map(p=>'<article class="card"><div class="product-icon">'+p.icon+'</div><h3>'+p.name+'</h3><p class="price">₹'+p.price+'</p><button onclick="addToCart(\''+p.id+'\')">Add to Cart</button></article>').join(''):'<div class="panel">इस श्रेणी में अभी कोई प्रोडक्ट उपलब्ध नहीं है।</div>'}
+function addToCart(id){cart[id]=(cart[id]||0)+1;saveCart();alert('Product added to cart!')}
+function cartItems(){return products.filter(p=>cart[p.id]>0)}
+function total(){return cartItems().reduce((s,p)=>s+p.price*cart[p.id],0)}
+function renderCart(){const items=cartItems();document.getElementById('cartLines').innerHTML=items.length?items.map(p=>'<div class="cartline row"><div><b>'+p.name+'</b><div class="muted">₹'+p.price+' each</div></div><div class="qty"><button class="secondary" onclick="changeQty(\''+p.id+'\',-1)">−</button><b>'+cart[p.id]+'</b><button class="secondary" onclick="changeQty(\''+p.id+'\',1)">+</button></div><b>₹'+p.price*cart[p.id]+'</b></div>').join(''):'<p>Your cart is empty.</p>';document.getElementById('cartTotal').textContent='Total: ₹'+total();document.getElementById('checkoutTotal').textContent='Total: ₹'+total();document.getElementById('checkoutBtn').disabled=!items.length}
+function changeQty(id,n){cart[id]=(cart[id]||0)+n;if(cart[id]<=0)delete cart[id];saveCart();renderCart()}
+function showView(v){['shop','cart','checkout','delivery','success'].forEach(x=>document.getElementById(x+'View').classList.toggle('hidden',x!==v));if(v==='cart'||v==='checkout')renderCart();if(v==='delivery')renderOrders();window.scrollTo(0,0)}
+function placeOrder(e){e.preventDefault();const items=cartItems();if(!items.length){alert('Please add products first.');return}const order={id:'BL'+Date.now().toString().slice(-8),createdAt:new Date().toISOString(),name:document.getElementById('customerName').value.trim(),phone:document.getElementById('customerPhone').value.trim(),address:document.getElementById('customerAddress').value.trim(),note:document.getElementById('orderNote').value.trim(),items:items.map(p=>({name:p.name,price:p.price,qty:cart[p.id]})),total:total(),status:'New'};const orders=readOrders();orders.unshift(order);localStorage.setItem('blinko_orders',JSON.stringify(orders));cart={};saveCart();document.getElementById('successText').textContent='Order '+order.id+' saved. WhatsApp संदेश खोलने का प्रयास किया जा रहा है।';showView('success');const lines=order.items.map(i=>i.name+' x '+i.qty+' = ₹'+(i.price*i.qty)).join('\n');const msg='Blinko New Order\nOrder: '+order.id+'\nName: '+order.name+'\nMobile: '+order.phone+'\nAddress: '+order.address+'\nItems:\n'+lines+'\nTotal: ₹'+order.total+'\nNote: '+order.note;window.open('https://wa.me/91'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(msg),'_blank')}
+function renderOrders(){const orders=readOrders();const revenue=orders.reduce((s,o)=>s+o.total,0);document.getElementById('metrics').innerHTML='<div class="card"><b>'+orders.length+'</b><p class="muted">Saved orders</p></div><div class="card"><b>₹'+revenue+'</b><p class="muted">Order value</p></div><div class="card"><b>'+orders.filter(o=>o.status==='Delivered').length+'</b><p class="muted">Delivered</p></div>';document.getElementById('ordersList').innerHTML=orders.length?orders.map(o=>'<article class="card" style="text-align:left;margin-top:12px"><div class="row"><b>'+o.id+' · '+o.name+'</b><span class="status">'+o.status+'</span></div><p class="muted">'+new Date(o.createdAt).toLocaleString()+' · '+o.phone+'</p><p>'+o.address+'</p><p>'+o.items.map(i=>i.name+' × '+i.qty).join('<br>')+'</p><b>₹'+o.total+'</b><label>Status</label><select onchange="updateStatus(\''+o.id+'\',this.value)">'+['New','Accepted','Preparing','Out for Delivery','Delivered','Cancelled'].map(s=>'<option '+(o.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select></article>').join(''):'<p class="muted">अभी कोई ऑर्डर सेव नहीं है।</p>'}
+function updateStatus(id,status){const orders=readOrders().map(o=>o.id===id?{...o,status}:o);localStorage.setItem('blinko_orders',JSON.stringify(orders));renderOrders()}
+renderProducts();updateCartCount();
 </script>
-
-</body>
-</html>
+</body></html>
